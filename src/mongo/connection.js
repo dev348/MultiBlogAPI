@@ -8,7 +8,7 @@ export function connectDB(){
     }
 
     mongoose
-    .connect('mongodb://127.0.0.1:27017')
+    .connect('mongodb+srv://multiblog:77qRt3RsloeHQJ26@cluster0.b0gtslp.mongodb.net/multiblogs')
     .then(() => {
         console.log(`Mongo DB Connected `);
     })
