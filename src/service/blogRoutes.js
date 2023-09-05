@@ -23,6 +23,7 @@ router.get('/blogs', async (req, res) => {
           excerpt,
         };
       });
+      console.log(blogsWithExcerpts);
   
       res.json(blogsWithExcerpts);
     } catch (err) {
@@ -38,11 +39,27 @@ router.get('/blogs/:id', async (req, res) => {
     if (!blog) {
       return res.status(404).json({ error: 'Blog not found' });
     }
+    console.log(blog);
     res.json(blog);
   } catch (err) {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+router.get('/search', async (req, res) => {
+    console.log('API Endpoint Called');
+    const { query } = req.query;
+    try {
+      console.log('Query:', query); // Log the query to see if it's correctly received
+      const blogs = await Blog.find({ $text: { $search: query, $caseSensitive: false } });
+      console.log('Blogs:', blogs); // Log the retrieved blogs
+      res.json(blogs);
+    } catch (err) {
+      console.error('Error:', err); // Log the error for debugging
+      res.status(500).json({ error: 'Internal server error - 1' });
+    }
+  });
+  
 
 // Add a new blog
 router.post('/blogs', async (req, res) => {
@@ -56,15 +73,8 @@ router.post('/blogs', async (req, res) => {
   }
 });
 
-// Search for blogs based on keywords or topics
-router.get('/blogs/search', async (req, res) => {
-  const { query } = req.query;
-  try {
-    const blogs = await Blog.find({ $text: { $search: query } });
-    res.json(blogs);
-  } catch (err) {
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
+
+  
+  
 
 export default router; // Export the router
