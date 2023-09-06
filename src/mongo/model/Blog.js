@@ -22,7 +22,11 @@ const blogSchema = new mongoose.Schema({
 
 const Blog = mongoose.model('Blog', blogSchema);
 
-Blog.createIndexes({ title: 'text', content: 'text' });
+Blog.createIndexes({
+  title: 'text',
+  content: 'text',
+  author: 'text'
+});
 
 
 export default Blog;
