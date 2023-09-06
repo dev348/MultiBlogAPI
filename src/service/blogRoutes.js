@@ -8,16 +8,16 @@ const router = express.Router();
 router.get('/blogs', async (req, res) => {
     const { page = 1, limit = 6 } = req.query;
     try {
-      const totalCount = await this.Blog.countDocuments({});
+      const totalCount = await Blog.countDocuments({});
       const blogs = await Blog.find()
         .skip((page - 1) * limit)
         .limit(parseInt(limit))
-        .select('title content author') // Select only title and content fields
-        .lean(); // Convert Mongoose documents to plain JavaScript objects
+        .select('title content author') 
+        .lean(); 
   
       // Create excerpts for each blog
       const blogsWithExcerpts = blogs.map(blog => {
-        const excerpt = blog.content.substring(0, 100); // Extract the first 200 characters as an excerpt
+        const excerpt = blog.content.substring(0, 100); 
         return {
           _id: blog._id,
           title: blog.title,
@@ -27,7 +27,7 @@ router.get('/blogs', async (req, res) => {
         };
       });
   
-      res.json(blogsWithExcerpts,totalCount);
+      res.json({blogsWithExcerpts,totalCount});
     } catch (err) {
       res.status(500).json({ error: 'Internal server error' });
     }
@@ -73,4 +73,4 @@ router.post('/blogs', async (req, res) => {
 });
 
 
-export default router; // Export the router
+export default router;
