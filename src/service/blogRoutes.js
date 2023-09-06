@@ -8,6 +8,7 @@ const router = express.Router();
 router.get('/blogs', async (req, res) => {
     const { page = 1, limit = 6 } = req.query;
     try {
+      const totalCount = await this.Blog.countDocuments({});
       const blogs = await Blog.find()
         .skip((page - 1) * limit)
         .limit(parseInt(limit))
@@ -25,9 +26,8 @@ router.get('/blogs', async (req, res) => {
           author:blog.author
         };
       });
-      console.log(blogsWithExcerpts);
   
-      res.json(blogsWithExcerpts);
+      res.json(blogsWithExcerpts,totalCount);
     } catch (err) {
       res.status(500).json({ error: 'Internal server error' });
     }
@@ -41,7 +41,6 @@ router.get('/blogs/:id', async (req, res) => {
     if (!blog) {
       return res.status(404).json({ error: 'Blog not found' });
     }
-    console.log(blog);
     res.json(blog);
   } catch (err) {
     res.status(500).json({ error: 'Internal server error' });
@@ -52,9 +51,7 @@ router.get('/search', async (req, res) => {
     console.log('API Endpoint Called');
     const { query } = req.query;
     try {
-      console.log('Query:', query); // Log the query to see if it's correctly received
       const blogs = await Blog.find({ $text: { $search: query, $caseSensitive: false } });
-      console.log('Blogs:', blogs); // Log the retrieved blogs
       res.json(blogs);
     } catch (err) {
       console.error('Error:', err); // Log the error for debugging
@@ -75,8 +72,5 @@ router.post('/blogs', async (req, res) => {
   }
 });
 
-
-  
-  
 
 export default router; // Export the router
