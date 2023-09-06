@@ -12,7 +12,7 @@ router.get('/blogs', async (req, res) => {
       const blogs = await Blog.find()
         .skip((page - 1) * limit)
         .limit(parseInt(limit))
-        .select('title content author') 
+        .select('title content author language') 
         .lean(); 
   
       // Create excerpts for each blog
@@ -23,7 +23,8 @@ router.get('/blogs', async (req, res) => {
           title: blog.title,
           excerpt,
           content:blog.content,
-          author:blog.author
+          author:blog.author,
+          language:blog.language
         };
       });
   
