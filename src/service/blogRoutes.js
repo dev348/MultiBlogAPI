@@ -11,7 +11,7 @@ router.get('/blogs', async (req, res) => {
       const blogs = await Blog.find()
         .skip((page - 1) * limit)
         .limit(parseInt(limit))
-        .select('title content') // Select only title and content fields
+        .select('title content author') // Select only title and content fields
         .lean(); // Convert Mongoose documents to plain JavaScript objects
   
       // Create excerpts for each blog
@@ -21,6 +21,8 @@ router.get('/blogs', async (req, res) => {
           _id: blog._id,
           title: blog.title,
           excerpt,
+          content:blog.content,
+          author:blog.author
         };
       });
       console.log(blogsWithExcerpts);
