@@ -50,7 +50,7 @@ router.get('/blogs/:id', async (req, res) => {
 
 router.get('/search', async (req, res) => {
     console.log('API Endpoint Called');
-    const { query } = req.query;
+    const query  = req.query;
     try {
       const blogs = await Blog.find({ $text: { $search: query, $caseSensitive: false } });
       res.json(blogs);
