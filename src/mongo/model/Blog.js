@@ -18,11 +18,11 @@ const blogSchema = new mongoose.Schema({
     required: true,
   },
 });
-
+blogSchema.index({ title: 'text', content: 'text' });
 
 const Blog = mongoose.model('Blog', blogSchema);
 
-Blog.createIndexes({ title: 'text', content: 'text' });
+// Blog.createIndexes({ title: 'text', content: 'text' });
 
 
 export default Blog;
